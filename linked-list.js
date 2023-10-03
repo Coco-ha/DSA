@@ -56,37 +56,37 @@ class LinkedList {
   /** pop(): return & remove last item. */
 
   pop() {
-    if (!this.head) throw new Error("List is empty.");
+    // if (!this.head) throw new Error("List is empty.");
 
-    let current = this.head;
-    let previousNode = null;
-    while (current.next) {
-      previousNode = current;
-      current = current.next;
-    }
-    this.tail = previousNode;
-    this.tail.next = null;
-    this.length--;
-    return current;
-
+    // let current = this.head;
+    // let previousNode = null;
+    // while (current.next) {
+    //   previousNode = current;
+    //   current = current.next;
+    // }
+    // this.tail = previousNode;
+    // this.tail.next = null;
+    // this.length--;
+    // return current.val;
+    return this.removeAt(this.length-1)
   }
 
   /** shift(): return & remove first item. */
 
   shift() {
-    if (!this.head) throw new Error("List is empty.");
-    let originalHead = this.head;
-    this.head = this.head.next;
-    this.length--;
-    return originalHead;
-
+    // if (!this.head) throw new Error("List is empty.");
+    // let originalHead = this.head;
+    // this.head = this.head.next;
+    // this.length--;
+    // return originalHead.val;
+    return this.removeAt(0)
   }
 
   /** getAt(idx): get val at idx. */
 
   getAt(idx) {
     if (!this.head) throw new Error("List is empty.");
-    if (idx >= this.length || idx < 0 ) throw new Error("Index is invalid.")
+    if (idx >= this.length || idx < 0) throw new Error("Index is invalid.");
     let current = this.head;
     let result = this.head;
     let counter = 0;
@@ -96,26 +96,52 @@ class LinkedList {
       current = current.next;
       result = current;
     }
-    return result;  //next on null value could be undefined
+    return result.val;  //next on null value could be undefined
   }
 
   /** setAt(idx, val): set val at idx to val */
 
   setAt(idx, val) {
     if (!this.head) throw new Error("List is empty.");
-    if (idx >= this.length || idx < 0 ) throw new Error("Index is invalid.")
+    if (idx >= this.length || idx < 0) throw new Error("Index is invalid.");
 
     // add value as a node
-    let newNode = new Node(val);
+    // let newNode = new Node(val);
 
     // special case if only one node
-    if (idx === 0 && this.head === this.tail) {
-      this.head = newNode;
-      this.tail = newNode;
+    if (idx === 0 ) {
+      this.head.val = val;
     }
-
     // find the prior value and point it at new node
     let current = this.head;
+    // let previousNode = null;
+    let counter = 0;
+
+    while (counter !== idx) {
+      counter++;
+      // previousNode = current;
+      current = current.next;
+    }
+    current.val = val
+  }
+
+  /** insertAt(idx, val): add node w/val before idx. */
+
+  insertAt(idx, val) {
+    if (!this.head) throw new Error("List is empty.");
+    if (idx >= this.length || idx < 0) throw new Error("Index is invalid.");
+    // find the current value at the index
+    let newNode = new Node(val);
+
+    let current = this.head
+    if (idx === 0) {
+      current = newNode;
+      current.next = this.head;
+      this.head = current;
+      this.length++;
+      return undefined;
+    }
+
     let previousNode = null;
     let counter = 0;
 
@@ -126,24 +152,54 @@ class LinkedList {
     }
 
     previousNode.next = newNode;
-    newNode.next = current.next
-    if (this.tail === current) this.tail = newNode;
-    if (this.head === current) this.head = newNode;
-  }
-
-  /** insertAt(idx, val): add node w/val before idx. */
-
-  insertAt(idx, val) {
-    // find the current value at the index
-    // keep track of value at prior index
-    // point prior index at new value
-    // point new value at current value
+    newNode.next = current;
+    this.length++;
 
   }
 
   /** removeAt(idx): return & remove item at idx, */
 
   removeAt(idx) {
+    if (!this.head) throw new Error("List is empty.");
+    if (idx >= this.length || idx < 0) throw new Error("Index is invalid.");
+
+    let current = this.head;
+    let previousNode = null;
+    let counter = 0;
+
+    if (idx === 0) {
+      if (this.length === 1) {
+        this.head = null;
+        this.tail = null;
+        this.length--
+        return current.val;
+      }
+      this.head = current.next;
+      this.length--;
+      return current.val;
+    }
+
+    if (idx === this.length - 1) {
+      while (counter !== idx) {
+        counter++; //3
+        previousNode = current; //c
+        current = current.next;// d
+      }
+      previousNode.next = null;
+      this.tail = previousNode; // tail = c
+      this.length--;
+      return current.val;
+    }
+
+    while (counter !== idx) {
+      counter++; //2
+      previousNode = current; //b
+      current = current.next; //c
+    }
+
+    previousNode.next = current.next;
+    this.length--;
+    return current.val;
 
   }
 

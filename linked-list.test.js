@@ -133,7 +133,7 @@ describe("insertAt", function() {
     expect(lst.head.next.next.val).toBe(15);
     expect(lst.tail.val).toBe(15);
     expect(lst.length).toBe(3);
-
+    
     lst.insertAt(0, 1);
     expect(lst.head.val).toBe(1);
     expect(lst.tail.val).toBe(15);
